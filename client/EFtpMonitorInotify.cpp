@@ -29,13 +29,8 @@ void EFtpMonitorInotify::handle_event(struct inotify_event *ev) {
 
 	if ((ev->mask & IN_CREATE) && (ev->mask & IN_ISDIR)) {
 		// new dir, we need to listen to it!
-		QString p = wd.value(ev->wd)+"/"+name;
-		int res = inotify_add_watch(fd, p.toUtf8().constData(), EFTP_INOTIFY_MASK);
-		if (res != -1) {
-			wd.insert(res, p);
-		}
-
-		directoryCreated(p);
+		init_watch(path+wd.value(ev->wd)+"/"+name);
+		directoryCreated(wd.value(ev->wd)+"/"+name);
 	} else if (ev->mask & IN_CREATE) {
 		// created something else than a dir
 		fileCreated(wd.value(ev->wd)+"/"+name);
@@ -72,12 +67,12 @@ void EFtpMonitorInotify::handle_event(struct inotify_event *ev) {
 				int res = inotify_add_watch(fd, p.toUtf8().constData(), EFTP_INOTIFY_MASK);
 				// should return the same id as before
 				if (!wd.contains(res)) qDebug("hm, weird");
-				wd.insert(res, p); // insert will replace value
+				wd.insert(res, p.mid(path.size())); // insert will replace value
 			}
 
 			rename_cookie = 0;
 		} else if (ev->mask & IN_ISDIR) {
-			init_watch(wd.value(ev->wd)+"/"+name); // force rescan of this dir
+			init_watch(path+wd.value(ev->wd)+"/"+name); // force rescan of this dir
 		}
 	} else if (rename_cookie != 0) {
 		qDebug("rename from without rename to, probably a rename to outside (ie. a delete for us)");
@@ -138,7 +133,7 @@ void EFtpMonitorInotify::init_watch(const QString &p) {
 		qDebug("inotify_add_watch failed");
 		return;
 	}
-	wd.insert(res, p);
+	wd.insert(res, p.mid(path.size()));
 
 	// scan directory for directories
 	QDir dp(p);
