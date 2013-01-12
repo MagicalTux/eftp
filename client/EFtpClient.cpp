@@ -15,7 +15,6 @@ bool EFtpClient::setPath(const QString &_path) {
 	monitorStop();
 	path = _path;
 	EFtpMonitor *mon = new EFtpMonitorInotify(this, path);
-
 	connect(mon, SIGNAL(directoryCreated(const QString&)), this, SLOT(directoryCreated(const QString&)));
 	connect(mon, SIGNAL(directoryDeleted(const QString&)), this, SLOT(directoryDeleted(const QString&)));
 	connect(mon, SIGNAL(fileCreated(const QString&)), this, SLOT(fileCreated(const QString&)));
@@ -23,6 +22,7 @@ bool EFtpClient::setPath(const QString &_path) {
 	connect(mon, SIGNAL(fileAttrChanged(const QString&)), this, SLOT(fileAttrChanged(const QString&)));
 	connect(mon, SIGNAL(fileDeleted(const QString&)), this, SLOT(fileDeleted(const QString&)));
 	connect(mon, SIGNAL(fileRename(const QString&,const QString&)), this, SLOT(fileRename(const QString&,const QString&)));
+	mon->rescan();
 	return true;
 }
 

@@ -11,6 +11,9 @@ EFtpMonitorInotify::EFtpMonitorInotify(EFtpClient *_client, const QString &_path
 	fd = inotify_init1(IN_NONBLOCK | IN_CLOEXEC);
 	fdn = new QSocketNotifier(fd, QSocketNotifier::Read, this);
 	connect(fdn, SIGNAL(activated(int)), this, SLOT(activity(int)));
+}
+
+void EFtpMonitorInotify::rescan() {
 	init_watch(path);
 }
 
@@ -133,12 +136,24 @@ void EFtpMonitorInotify::init_watch(const QString &p) {
 		qDebug("inotify_add_watch failed");
 		return;
 	}
-	wd.insert(res, p.mid(path.size()));
+	if (p == path) { // special case for root
+		wd.insert(res, "/");
+		directoryCreated("/");
+	} else {
+		wd.insert(res, p.mid(path.size()));
+		directoryCreated(p.mid(path.size()));
+	}
 
 	// scan directory for directories
 	QDir dp(p);
-	QStringList l = dp.entryList(QDir::Dirs | QDir::NoDotAndDotDot | QDir::Hidden);
+	QFileInfoList l = dp.entryInfoList(QDir::AllEntries | QDir::NoDotAndDotDot | QDir::Hidden);
 
-	for(int i = 0; i < l.size(); i++) init_watch(dp.filePath(l.at(i)));
+	for(int i = 0; i < l.size(); i++) {
+		if (l.at(i).isDir()) {
+			init_watch(l.at(i).filePath());
+		} else {
+			fileCreated(l.at(i).filePath().mid(path.size()));
+		}
+	}
 }
 

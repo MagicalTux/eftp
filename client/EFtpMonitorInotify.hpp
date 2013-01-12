@@ -15,6 +15,7 @@ public:
 
 public slots:
 	void activity(int fd);
+	void rescan(); // needs to be called at least once
 
 private:
 	void init_watch(const QString &p);

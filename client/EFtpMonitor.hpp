@@ -6,6 +6,7 @@ class EFtpMonitor: public QObject {
 	Q_OBJECT;
 public:
 	EFtpMonitor(EFtpClient *client, const QString &path);
+	virtual void rescan() = 0; // needs to be called at least once
 
 signals:
 	void directoryCreated(const QString &path);
