@@ -1,5 +1,7 @@
 #include <QObject>
 
+class EFtpDatabase;
+
 class EFtpClient: public QObject {
 	Q_OBJECT;
 public:
@@ -20,5 +22,6 @@ signals:
 
 private:
 	QString path;
+	EFtpDatabase *db;
 };
 

@@ -7,8 +7,10 @@ TARGET =
 DEPENDPATH += .
 INCLUDEPATH += .
 QT -= gui
-QT += network
+QT += network sql
+
+INCLUDEPATH += ../common/
 
 # Input
-HEADERS += EFtpClient.hpp EFtpMonitor.hpp EFtpMonitorInotify.hpp
-SOURCES += cli.cpp EFtpClient.cpp EFtpMonitor.cpp EFtpMonitorInotify.cpp
+HEADERS += EFtpClient.hpp EFtpMonitor.hpp EFtpMonitorInotify.hpp ../common/EFtpDatabase.hpp
+SOURCES += cli.cpp EFtpClient.cpp EFtpMonitor.cpp EFtpMonitorInotify.cpp ../common/EFtpDatabase.cpp

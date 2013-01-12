@@ -1,8 +1,10 @@
 #include "EFtpClient.hpp"
 #include "EFtpMonitorInotify.hpp"
+#include <EFtpDatabase.hpp>
 #include <QDir>
 
 EFtpClient::EFtpClient() {
+	db = new EFtpDatabase("foo", this);
 	qDebug("EFtpClient: hi");
 }
 
