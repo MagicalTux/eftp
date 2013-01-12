@@ -2,9 +2,18 @@
 #include "EFtpMonitorInotify.hpp"
 #include <EFtpDatabase.hpp>
 #include <QDir>
+#ifdef EFTP_COMPAT_STDPATH
+# include <QDesktopServices>
+#else
+# include <QStandardPaths>
+#endif
 
 EFtpClient::EFtpClient() {
-	db = new EFtpDatabase("foo", this);
+#ifdef EFTP_COMPAT_STDPATH
+	db = new EFtpDatabase(QDesktopServices::storageLocation(QDesktopServices::CacheLocation)+"/eftp.db", this);
+#else
+	db = new EFtpDatabase(QStandardPaths::writableLocation(QStandardPaths::CacheLocation)+"/eftp.db", this);
+#endif
 	qDebug("EFtpClient: hi");
 }
 

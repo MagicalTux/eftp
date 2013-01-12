@@ -2,7 +2,7 @@
 
 EFtpDatabase::EFtpDatabase(const QString &path, QObject *parent): QObject(parent) {
 	db = QSqlDatabase::addDatabase("QSQLITE");
-	qDebug("here");
+	qDebug("EFtpDatabase: located at %s", qPrintable(path));
 }
 
 

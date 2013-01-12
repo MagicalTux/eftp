@@ -6,7 +6,12 @@ TEMPLATE = app
 TARGET = 
 DEPENDPATH += .
 INCLUDEPATH += .
-QT -= gui
+
+!contains(QT_VERSION, ^4\\..*) {
+	QT -= gui
+} else {
+	DEFINES += EFTP_COMPAT_STDPATH
+}
 QT += network sql
 
 INCLUDEPATH += ../common/
