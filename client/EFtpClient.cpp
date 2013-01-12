@@ -10,11 +10,12 @@
 
 EFtpClient::EFtpClient() {
 #ifdef EFTP_COMPAT_STDPATH
-	db = new EFtpDatabase(QDesktopServices::storageLocation(QDesktopServices::CacheLocation)+"/eftp.db", this);
+	QDir db_path(QDesktopServices::storageLocation(QDesktopServices::CacheLocation));
 #else
-	db = new EFtpDatabase(QStandardPaths::writableLocation(QStandardPaths::CacheLocation)+"/eftp.db", this);
+	QDir db_path(QStandardPaths::writableLocation(QStandardPaths::CacheLocation));
 #endif
-	qDebug("EFtpClient: hi");
+	db_path.mkpath("."); // ensure path exists
+	db = new EFtpDatabase(db_path.filePath("eftp.db"), this);
 }
 
 bool EFtpClient::setPath(const QString &_path) {

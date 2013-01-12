@@ -11,12 +11,9 @@ This table contains the directory structure. Directory #0 is the root
 * parent_dir_id
 * name
 * chmod
-* stamp
-
-# dir_whiteout
-
-* dir_id
-* stamp
+* stamp (int)
+* deleted (int, NULL)
+* impl (int)
 
 # file
 
@@ -24,7 +21,9 @@ This table contains the directory structure. Directory #0 is the root
 * dir_id
 * name
 * chmod
-* stamp
+* stamp (int)
+* deleted (int, NULL)
+* impl (int)
 
 # file_block
 
@@ -33,7 +32,3 @@ This table contains the directory structure. Directory #0 is the root
 * block_hash
 * stamp
 
-# file_whiteout
-
-* file_id
-* stamp
