@@ -15,9 +15,13 @@ EFtpDatabase::EFtpDatabase(const QString &path, QObject *parent): QObject(parent
 
 	QStringList tables = db.tables();
 
-	if (!tables.contains("dir")) {
-		db.exec("CREATE TABLE `dir` (`dir` INT PRIMARY KEY NOT NULL, `parent_dir_id` INT NOT NULL, `name` VARCHAR(128) NOT NULL, `chmod` INT NOT NULL, `created` INT NOT NULL, `modified` INT NOT NULL, `deleted` INT, `impl` INT)");
-		db.exec("CREATE UNIQUE INDEX `dir_name` ON `dir`(`parent_dir_id`,`name`)");
+	if (!tables.contains("inode")) {
+		db.exec("CREATE TABLE `inode` (`inode_id` INT PRIMARY KEY NOT NULL, `parent_inode_id` INT NOT NULL, `name` VARCHAR(255) NOT NULL, `type` CHAR(1) NOT NULL, `chmod` INT NOT NULL, `size` BIGINT NOT NULL, `created` BIGINT NOT NULL, `modified` BIGINT NOT NULL, `deleted` BIGINT, `impl` BIGINT)");
+		db.exec("CREATE UNIQUE INDEX `inode_name` ON `inode`(`parent_inode_id`,`name`)");
+	}
+	if (!tables.contains("block")) {
+		db.exec("CREATE TABLE `block` (`block_id` INT PRIMARY KEY NOT NULL, `inode_id` INT NOT NULL, `offset` INT NOT NULL, `block_hash` CHAR(40) NOT NULL, `modified` BIGINT NOT NULL)");
+		db.exec("CREATE UNIQUE INDEX `block_offset` ON `block`(`inode_id`,`offset`)");
 	}
 }
 
