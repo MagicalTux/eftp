@@ -1,5 +1,7 @@
 #include "EFtpDatabase.hpp"
 #include <QCoreApplication>
+#include <QStringList>
+#include <QSqlQuery>
 
 EFtpDatabase::EFtpDatabase(const QString &path, QObject *parent): QObject(parent) {
 	db = QSqlDatabase::addDatabase("QSQLITE");
