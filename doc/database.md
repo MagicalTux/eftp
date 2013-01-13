@@ -14,37 +14,27 @@ to be re-instanciated.
 Deleted files have their size trimmed to zero, which means that all entries
 from the file_block table for this file are to be deleted.
 
-# dir
+# inode
 
-This table contains the directory structure. Directory #0 is the root
+This table contains the tree structure. Inode #0 is the root.
 
-* dir_id
-* parent_dir_id
+* inode_id
+* parent_inode_id
 * name
-* chmod
-* created (int)
-* modified (int)
-* deleted (int, NULL)
-* impl (int, NULL)
-
-# file
-
-* file_id
-* dir_id
-* name
+* type (char(1), "d" or "f")
 * chmod
 * size
-* created (int)
-* modified (int)
-* deleted (int, NULL)
-* impl (int, NULL)
+* created (bigint)
+* modified (bigint)
+* deleted (bigint, NULL)
+* impl (bigint, NULL)
 
-# file_block
+# block
 
-In this table, file_id+offset form an unique key.
+In this table, inode_id+offset form an unique key.
 
 * block_id
-* file_id
+* inode_id
 * offset
 * block_hash
 * modified
