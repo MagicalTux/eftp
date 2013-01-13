@@ -3,7 +3,7 @@
 ######################################################################
 
 TEMPLATE = app
-TARGET = 
+TARGET = ../eftp-server
 DEPENDPATH += .
 INCLUDEPATH += .
 
